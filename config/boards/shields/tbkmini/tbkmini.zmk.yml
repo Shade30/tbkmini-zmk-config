@@ -1,0 +1,12 @@
+file_format: '1'
+id: tbkmini
+name: TBK Mini
+type: shield
+url: https://github.com/ergonautkb/one
+requires: [nice_nano_v2]
+features:
+  - keys
+  - studio
+siblings:
+  - tbkmini_left
+  - tbkmini_right
