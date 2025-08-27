@@ -33,6 +33,14 @@
     flavor = "balanced";
 };
 
+&mmv {
+    time-to-max-speed-ms = <1000>;
+};
+
+&msc {
+    time-to-max-speed-ms = <600>;
+};
+
 / {
     combos {
         compatible = "zmk,combos";
