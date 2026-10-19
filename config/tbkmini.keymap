@@ -4,18 +4,18 @@
  * SPDX-License-Identifier: MIT
  */
 
-// Main keymap: this file is used for the build and is what keymap-editor opens (the copy in boards/shields/tbkmini is ignored)
-// Edit visually at https://nickcoutsos.github.io/keymap-editor/ (GitHub -> Shade30/tbkmini-zmk-config -> branch), then Commit
+// Основная раскладка: этот файл идёт в сборку и открывается в keymap-editor (копия в boards/shields/tbkmini не используется)
+// Визуальный редактор: https://nickcoutsos.github.io/keymap-editor/ (GitHub -> Shade30/tbkmini-zmk-config -> ветка), затем Commit
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
 
-// Key codes reference: https://zmk.dev/docs/keymaps/list-of-keycodes
-// Layer numbers used in &mo / &lt: 0 = Base, 1 = Lower, 2 = Raise, 3 = Adjust (order of layers in the keymap below)
+// Список кодов клавиш: https://zmk.dev/docs/keymaps/list-of-keycodes
+// Номера слоёв для &mo / &lt: 0 = Base, 1 = Lower, 2 = Raise, 3 = Adjust (порядок слоёв ниже)
 
-// Hold-tap timings: quick_tap_ms = repeat window for the tap action; add tapping-term-ms = <200>; to change hold delay
+// Тайминги hold-tap: quick_tap_ms — окно повтора нажатия; чтобы изменить задержку удержания, добавьте tapping-term-ms = <200>;
 &lt {
     quick_tap_ms = <200>;
 };
@@ -28,7 +28,7 @@
     keymap {
         compatible = "zmk,keymap";
 
-        // Layer 0: base letters; each layer has 42 keys = 3 rows x 12 + 6 thumbs
+        // Слой 0: буквы; в каждом слое 42 клавиши = 3 ряда по 12 + 6 под большие пальцы
         default_layer {
             display-name = "Base";
             bindings = <
@@ -39,7 +39,7 @@
             >;
         };
 
-        // Layer 1: numbers and symbols (hold left middle thumb)
+        // Слой 1: цифры и символы (удерживать среднюю левую клавишу под большой палец)
         lower_layer {
             display-name = "Lower";
             bindings = <
@@ -50,7 +50,7 @@
             >;
         };
 
-        // Layer 2: F-keys, arrows, navigation (hold left inner thumb / Enter)
+        // Слой 2: F-клавиши, стрелки, навигация (удерживать внутреннюю левую клавишу под большой палец / Enter)
         raise_layer {
             display-name = "Raise";
             bindings = <
@@ -61,7 +61,7 @@
             >;
         };
 
-        // Layer 3: Bluetooth profiles, USB/BLE toggle, reset/bootloader (Lower + Raise); keep &bootloader reachable for flashing
+        // Слой 3: профили Bluetooth, переключение USB/BLE, сброс/загрузчик (Lower + Raise); &bootloader не убирать — нужен для прошивки
         adjust_layer {
             display-name = "Adjust";
             bindings = <

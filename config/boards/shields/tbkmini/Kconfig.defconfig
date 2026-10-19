@@ -3,7 +3,7 @@
 
 if SHIELD_TBKMINI_RIGHT
 
-# Bluetooth name of the keyboard (max 16 chars)
+# Bluetooth-имя клавиатуры (не более 16 символов)
 config ZMK_KEYBOARD_NAME
 	default "TBK Mini"
 

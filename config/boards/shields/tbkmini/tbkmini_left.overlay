@@ -1,6 +1,6 @@
 #include "tbkmini.dtsi"
 
-// Left half column pins (hardware-specific, do not change)
+// Пины колонок левой половины (зависят от платы, не менять)
 &kscan0 {
     col-gpios
         = <&pro_micro 19 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>

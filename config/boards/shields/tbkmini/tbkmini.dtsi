@@ -1,5 +1,5 @@
 #include <dt-bindings/zmk/matrix_transform.h>
-// Physical layout borrowed from Corne 6-column (42 keys); config/info.json mirrors it for keymap-editor
+// Физическая раскладка взята от Corne 6 колонок (42 клавиши); config/info.json — её копия для keymap-editor
 #include <layouts/foostan/corne/6column.dtsi>
 
 &foostan_corne_6col_layout {
@@ -12,7 +12,7 @@
         zmk,physical-layout = &foostan_corne_6col_layout;
     };
 
-    // Maps keymap positions to matrix (row, col); thumb row order differs from Corne wiring
+    // Соответствие позиций keymap матрице (строка, колонка); порядок клавиш под большие пальцы отличается от Corne
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         columns = <12>;
@@ -30,7 +30,7 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(2,5)          RC(2,6) RC(2,7) RC(2,8)
         compatible = "zmk,kscan-gpio-matrix";
         label = "KSCAN";
 
-        // Diode direction and row pins are hardware-specific: do not change
+        // Направление диодов и пины строк зависят от платы: не менять
         diode-direction = "row2col";
         wakeup-source;
         row-gpios
