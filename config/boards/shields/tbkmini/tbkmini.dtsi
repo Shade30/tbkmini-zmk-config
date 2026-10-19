@@ -1,5 +1,5 @@
 #include <dt-bindings/zmk/matrix_transform.h>
-// Физическая раскладка взята от Corne 6 колонок (42 клавиши); config/info.json — её копия для keymap-editor
+// Физическая раскладка взята от Corne 6 колонок (42 клавиши); положение кнопок для keymap-editor — в config/tbkmini.json
 #include <layouts/foostan/corne/6column.dtsi>
 
 &foostan_corne_6col_layout {
