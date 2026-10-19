@@ -1,9 +1,11 @@
 #include "tbkmini.dtsi"
 
+// Right half columns start at 6 in the transform
 &default_transform {
     col-offset = <6>;
 };
 
+// Right half column pins, mirrored order (hardware-specific, do not change)
 &kscan0 {
     col-gpios
         = <&pro_micro 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
