@@ -6,25 +6,152 @@
 
 // Основная раскладка: этот файл идёт в сборку и открывается в keymap-editor (копия в boards/shields/tbkmini не используется)
 // Визуальный редактор: https://nickcoutsos.github.io/keymap-editor/ (GitHub -> Shade30/tbkmini-zmk-config -> ветка), затем Commit
+// Раскладка перенесена из Vial (corne.json); RGB-клавиши слоя 3 заменены на Bluetooth, т.к. подсветки на TBK Mini нет
+
+// Скорость курсора и прокрутки для мышиных клавиш (по умолчанию 600 и 10)
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 20
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/pointing.h>
 
 // Список кодов клавиш: https://zmk.dev/docs/keymaps/list-of-keycodes
 // Номера слоёв для &mo / &lt: 0 = Base, 1 = Lower, 2 = Raise, 3 = Adjust (порядок слоёв ниже)
 
-// Тайминги hold-tap: quick_tap_ms — окно повтора нажатия; чтобы изменить задержку удержания, добавьте tapping-term-ms = <200>;
+// Тайминги hold-tap: tapping-term-ms — сколько держать для удержания, quick-tap-ms — окно повтора нажатия (как в Vial: 200 мс)
 &lt {
-    quick_tap_ms = <200>;
+    tapping-term-ms = <200>;
+    quick-tap-ms = <200>;
+    flavor = "balanced";
 };
 
 &mt {
-    quick_tap_ms = <200>;
+    tapping-term-ms = <200>;
+    quick-tap-ms = <200>;
+    flavor = "balanced";
+};
+
+// Разгон курсора и прокрутки до максимальной скорости, мс
+&mmv {
+    time-to-max-speed-ms = <1000>;
+};
+
+&msc {
+    time-to-max-speed-ms = <600>;
 };
 
 / {
+    // Слой 3 (Adjust) включается, когда одновременно активны слои 1 и 2
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+
+        adjust {
+            if-layers = <1 2>;
+            then-layer = <3>;
+        };
+    };
+
+    // Комбо: одновременное нажатие двух клавиш; key-positions — номера клавиш 0..41 слева направо, сверху вниз; работают только на слое 0
+    combos {
+        compatible = "zmk,combos";
+
+        combo_esc {
+            timeout-ms = <30>;
+            key-positions = <1 2>;
+            bindings = <&gresc>;
+            layers = <0>;
+        };
+
+        combo_del {
+            timeout-ms = <30>;
+            key-positions = <3 4>;
+            bindings = <&kp DEL>;
+            layers = <0>;
+        };
+
+        combo_tab {
+            timeout-ms = <30>;
+            key-positions = <13 14>;
+            bindings = <&kp TAB>;
+            layers = <0>;
+        };
+
+        combo_bspc {
+            timeout-ms = <30>;
+            key-positions = <15 16>;
+            bindings = <&kp BSPC>;
+            layers = <0>;
+        };
+
+        combo_gui {
+            timeout-ms = <30>;
+            key-positions = <25 26>;
+            bindings = <&kp LGUI>;
+            layers = <0>;
+        };
+
+        combo_ret {
+            timeout-ms = <30>;
+            key-positions = <19 20>;
+            bindings = <&kp RET>;
+            layers = <0>;
+        };
+
+        combo_lbkt {
+            timeout-ms = <30>;
+            key-positions = <9 10>;
+            bindings = <&kp LBKT>;
+            layers = <0>;
+        };
+
+        combo_sqt {
+            timeout-ms = <30>;
+            key-positions = <21 22>;
+            bindings = <&kp SQT>;
+            layers = <0>;
+        };
+
+        combo_rbkt {
+            timeout-ms = <30>;
+            key-positions = <33 34>;
+            bindings = <&kp RBKT>;
+            layers = <0>;
+        };
+
+        // Shift+Alt — переключение языка
+        combo_lang {
+            timeout-ms = <30>;
+            key-positions = <31 32>;
+            bindings = <&kp LS(LALT)>;
+            layers = <0>;
+        };
+
+        // P + S на разных половинах: таймаут больше из-за задержки Bluetooth между половинами
+        combo_pscrn {
+            timeout-ms = <50>;
+            key-positions = <10 14>;
+            bindings = <&kp PSCRN>;
+            layers = <0>;
+        };
+    };
+
+    macros {
+        // Вырезает выделенное и вставляет его обратно внутри блока ``` C++ ... ``` (макрос M0 из Vial)
+        cpp_block: cpp_block {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&kp LC(X)>
+                , <&kp GRAVE &kp GRAVE &kp GRAVE &kp SPACE &kp LS(C) &kp PLUS &kp PLUS &kp SPACE>
+                , <&kp RET &kp LSHFT &kp LC(V) &kp RET &kp LSHFT>
+                , <&kp GRAVE &kp GRAVE &kp GRAVE>
+                ;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -32,43 +159,43 @@
         default_layer {
             display-name = "Base";
             bindings = <
-&mt LALT ESC     &kp Q  &kp W  &kp E     &kp R  &kp T      &kp Y      &kp U          &kp I                  &kp O    &kp P     &kp LBKT
-&mt LCTRL TAB    &kp A  &kp S  &kp D     &kp F  &kp G      &kp H      &kp J          &kp K                  &kp L    &kp SEMI  &kp SQT
-&mt LSHIFT BSLH  &kp Z  &kp X  &kp C     &kp V  &kp B      &kp N      &kp M          &kp COMMA              &kp DOT  &kp FSLH  &mt LALT GRAVE
-                               &kp LGUI  &mo 1  &lt 2 RET  &kp SPACE  &kp BACKSPACE  &mt LS(LEFT_ALT) CAPS
+&none  &kp Q  &kp W  &kp E  &kp R  &kp T            &kp Y      &kp U  &kp I      &kp O    &kp P     &none
+&none  &kp A  &kp S  &kp D  &kp F  &kp G            &kp H      &kp J  &kp K      &kp L    &kp SEMI  &none
+&none  &kp Z  &kp X  &kp C  &kp V  &kp B            &kp N      &kp M  &kp COMMA  &kp DOT  &kp FSLH  &none
+                     &mt LALT RET  &kp LCTRL  &mt LSHFT BSPC  &kp SPACE  &mo 1  &lt 2 BSPC
             >;
         };
 
-        // Слой 1: цифры и символы (удерживать среднюю левую клавишу под большой палец)
+        // Слой 1: F-клавиши, мышь, стрелки (удерживать среднюю правую клавишу под большой палец)
         lower_layer {
             display-name = "Lower";
             bindings = <
-&trans     &kp N1    &kp N2       &kp N3        &kp N4          &kp N5            &kp N6             &kp N7           &kp N8     &kp N9                &kp N0                 &trans
-&trans     &kp EXCL  &kp AT       &kp HASH      &kp DOLLAR      &kp PERCENT       &kp CARET          &kp AMPS         &kp ASTRK  &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &none
-&kp LSHFT  &none     &kp KP_PLUS  &kp KP_MINUS  &kp LEFT_BRACE  &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &kp RIGHT_BRACE  &kp MINUS  &kp EQUAL             &none                  &kp BSLH
-                                  &kp LGUI      &trans          &mo 3             &trans             &kp DEL          &kp QMARK
+&none  &kp F1     &kp F2         &kp F3          &kp F4          &kp F5           &kp F6    &kp F7    &kp F8     &kp F9   &kp F10     &none
+&none  &mkp LCLK  &msc SCRL_UP   &mkp LCLK       &mmv MOVE_UP    &mkp RCLK        &kp HOME  &kp UP    &kp END    &kp F11  &kp F12     &none
+&none  &none      &msc SCRL_DOWN &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &kp LEFT  &kp DOWN  &kp RIGHT  &none    &cpp_block  &none
+                                 &trans          &trans          &trans           &trans    &trans    &trans
             >;
         };
 
-        // Слой 2: F-клавиши, стрелки, навигация (удерживать внутреннюю левую клавишу под большой палец / Enter)
+        // Слой 2: символы и цифры (удерживать крайнюю правую клавишу под большой палец, нажатие — Backspace)
         raise_layer {
             display-name = "Raise";
             bindings = <
-&kp LS(LG(N4))  &kp LS(LC(LG(N4)))  &kp LS(LG(N5))  &none     &kp PAGE_DOWN  &kp HOME  &none               &none                &kp PG_UP     &kp PG_DN      &kp HOME  &kp LS(LG(LC(N4)))
-&kp F1          &kp F2              &kp F3          &kp F4    &kp F5         &kp F6    &kp LEFT            &kp DOWN             &kp UP_ARROW  &kp RIGHT      &kp END   &none
-&kp F7          &kp F8              &kp F9          &kp F10   &kp F11        &kp F12   &kp LC(LEFT_ARROW)  &kp LC(RIGHT_ARROW)  &kp LA(LEFT)  &kp LA(RIGHT)  &trans    &trans
-                                                    &kp LGUI  &mo 3          &trans    &trans              &trans               &trans
+&none  &kp EXCL   &kp AT     &kp HASH  &kp DLLR   &kp PRCNT    &kp N7  &kp N8  &kp N9  &kp N0     &kp BSLH   &none
+&none  &kp CARET  &kp AMPS   &kp STAR  &kp LPAR   &kp RPAR     &kp N4  &kp N5  &kp N6  &kp MINUS  &kp QMARK  &none
+&none  &kp BSLH   &kp QMARK  &kp DQT   &kp MINUS  &kp EQUAL    &kp N1  &kp N2  &kp N3  &kp EQUAL  &kp DQT    &none
+                             &trans    &trans     &trans       &trans  &trans  &trans
             >;
         };
 
-        // Слой 3: профили Bluetooth, переключение USB/BLE, сброс/загрузчик (Lower + Raise); &bootloader не убирать — нужен для прошивки
+        // Слой 3: профили Bluetooth, переключение USB/BLE, сброс/загрузчик (Lower + Raise); &bootloader не убирать — нужен для прошивки, на каждой половине свой
         adjust_layer {
             display-name = "Adjust";
             bindings = <
-&sys_reset    &bootloader     &none         &none         &none         &none         &none         &none         &none         &none         &bootloader     &sys_reset
+&bootloader   &sys_reset      &none         &none         &none         &none         &none         &none         &none         &none         &sys_reset      &bootloader
 &bt BT_CLR    &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &bt BT_SEL 4  &bt BT_SEL 3  &bt BT_SEL 2  &bt BT_SEL 1  &bt BT_SEL 0    &bt BT_CLR
 &out OUT_TOG  &studio_unlock  &none         &none         &none         &none         &none         &none         &none         &none         &studio_unlock  &out OUT_TOG
-                                            &trans        &none         &trans        &trans        &none         &trans
+                                            &trans        &trans        &trans        &trans        &trans        &trans
             >;
         };
     };
